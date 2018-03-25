@@ -14,46 +14,42 @@ class ModeSelector extends React.Component {
   }
 }
 
-//class TimeDisplayer extends React.Component {
-//  render() {
-//    return (
-//      <h2> {setInterval(count, 1000)} </h2>
-//    );
-//  }
-//}
-
-class TimeController extends React.Component {
-  render() {
-    return (
-      <div>
-        <button type='button'> Start </button>
-        <button type='button'> Stop </button>
-        <button type='button'> Reset </button>
-      </div>
-
-    )
-  }
-}
-
 class Timer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {counter: 0};
+    this.pauseTimer = this.pauseTimer.bind(this);
+    this.startTimer = this.startTimer.bind(this);
+    this.resetTimer = this.resetTimer.bind(this);
   }
   componentDidMount() {
+    this.startTimer();
+  }
+  startTimer() {
     this.timer = setInterval(() => this.tick(), 1000)
   }
-  // why is props taken in as an argument if its not needed?
+  pauseTimer() {
+    clearInterval(this.timer);
+  }
+  resetTimer() {
+    this.setState(prevState => ({
+      counter: 0
+    }))
+  }
   tick() {
-    this.setState((prevState, props) => ({
+    this.setState((prevState) => ({
       counter: prevState.counter + 1
     }))
   }
   render() {
     return (
       <div>
-        {this.state.counter}
-        <TimeController />
+        <h2>
+          {this.state.counter}
+        </h2>
+        <button onClick={this.startTimer}> Start </button>
+        <button onClick={this.pauseTimer}> Pause </button>
+        <button onClick={this.resetTimer}> Reset </button>
       </div>
     )
   }
