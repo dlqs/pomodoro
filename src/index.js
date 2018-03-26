@@ -3,7 +3,12 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 // lengths of pomodoro, long break, short break respectively
-const durations = [1500, 600, 300]
+const durations = new Map();
+durations.set('pomodoro', 7);
+durations.set('longBreak', 6);
+durations.set('shortBreak', 5);
+// Ratio of short breaks to long breaks
+const shortToLongRatio = 4;
 
 class ModeSelector extends React.Component {
   constructor(props) {
@@ -15,13 +20,13 @@ class ModeSelector extends React.Component {
   // Is there a way to pass arguments into buttons
   // So that don't have to create so many functions?
   changeToPomodoro() {
-    this.props.onDurationChange(0);
+    this.props.onDurationChange('pomodoro');
   }
   changeToLongBreak() {
-    this.props.onDurationChange(1);
+    this.props.onDurationChange('longBreak');
   }
   changeToShortBreak() {
-    this.props.onDurationChange(2);
+    this.props.onDurationChange('shortBreak');
   }
   render() {
     return (
@@ -59,8 +64,9 @@ class TimerContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      durationIndex: 0,
-      counter: durations[0]
+      durationName : 'pomodoro',
+      counter: durations.get('pomodoro'),
+      numShortBreaks: 0
     };
     this.pauseTimer = this.pauseTimer.bind(this);
     this.startTimer = this.startTimer.bind(this);
@@ -70,10 +76,10 @@ class TimerContainer extends React.Component {
   componentDidMount() {
     this.startTimer();
   }
-  handleModeChange(index) {
+  handleModeChange(name) {
     this.setState(prevState => ({
-      durationIndex: index,
-      counter: durations[index]
+      durationName: name,
+      counter: durations.get(name)
     }))
   }
   startTimer() {
@@ -84,12 +90,11 @@ class TimerContainer extends React.Component {
   }
   resetTimer() {
     this.setState(prevState => ({
-      counter: durations[this.state.durationIndex]
+      counter: durations.get(this.state.durationName)
     }))
   }
   tick() {
     if (this.state.counter <= 0) {
-
     }
     this.setState((prevState) => ({
       counter: prevState.counter - 1
