@@ -2,11 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-const durations = {
-  pomodoro: 1500,
-  shortBreak: 300,
-  longBreak: 600
-}
+// lengths of pomodoro, long break, short break respectively
+const durations = [1500, 600, 300]
+
 class ModeSelector extends React.Component {
   constructor(props) {
     super(props);
@@ -17,13 +15,13 @@ class ModeSelector extends React.Component {
   // Is there a way to pass arguments into buttons
   // So that don't have to create so many functions?
   changeToPomodoro() {
-    this.props.onDurationChange(durations.pomodoro);
-  }
-  changeToShortBreak() {
-    this.props.onDurationChange(durations.shortBreak);
+    this.props.onDurationChange(durations[0]);
   }
   changeToLongBreak() {
-    this.props.onDurationChange(durations.longBreak);
+    this.props.onDurationChange(durations[1]);
+  }
+  changeToShortBreak() {
+    this.props.onDurationChange(durations[2]);
   }
   render() {
     return (
@@ -46,9 +44,7 @@ class Timer extends React.Component {
   getTimeString() {
     const minutes = "0" + Math.floor(this.props.counter / 60);
     const seconds = "0" + (this.props.counter - 60 * minutes);
-
     return minutes.substr(-2) + ":" + seconds.substr(-2);
-
   }
   render() {
     return (
@@ -63,8 +59,8 @@ class TimerContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      duration: durations.pomodoro,
-      counter: durations.pomodoro
+      duration: durations[0],
+      counter: durations[0]
     };
     this.pauseTimer = this.pauseTimer.bind(this);
     this.startTimer = this.startTimer.bind(this);
@@ -92,6 +88,9 @@ class TimerContainer extends React.Component {
     }))
   }
   tick() {
+    if (this.state.counter <= 0) {
+
+    }
     this.setState((prevState) => ({
       counter: prevState.counter - 1
     }))
