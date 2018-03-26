@@ -15,13 +15,13 @@ class ModeSelector extends React.Component {
   // Is there a way to pass arguments into buttons
   // So that don't have to create so many functions?
   changeToPomodoro() {
-    this.props.onDurationChange(durations[0]);
+    this.props.onDurationChange(0);
   }
   changeToLongBreak() {
-    this.props.onDurationChange(durations[1]);
+    this.props.onDurationChange(1);
   }
   changeToShortBreak() {
-    this.props.onDurationChange(durations[2]);
+    this.props.onDurationChange(2);
   }
   render() {
     return (
@@ -59,7 +59,7 @@ class TimerContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      duration: durations[0],
+      durationIndex: 0,
       counter: durations[0]
     };
     this.pauseTimer = this.pauseTimer.bind(this);
@@ -70,10 +70,10 @@ class TimerContainer extends React.Component {
   componentDidMount() {
     this.startTimer();
   }
-  handleModeChange(duration) {
+  handleModeChange(index) {
     this.setState(prevState => ({
-      counter: duration,
-      duration: duration
+      durationIndex: index,
+      counter: durations[index]
     }))
   }
   startTimer() {
@@ -84,7 +84,7 @@ class TimerContainer extends React.Component {
   }
   resetTimer() {
     this.setState(prevState => ({
-      counter: this.state.duration
+      counter: durations[this.state.durationIndex]
     }))
   }
   tick() {
