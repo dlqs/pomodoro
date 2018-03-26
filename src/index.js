@@ -95,6 +95,20 @@ class TimerContainer extends React.Component {
   }
   tick() {
     if (this.state.counter <= 0) {
+      if (this.state.durationName === 'pomodoro') {
+          if (this.state.numShortBreaks < shortToLongRatio) {
+            this.handleModeChange('shortBreak');
+            this.setState(prevState =>
+              ({numShortBreaks: prevState.numShortBreaks + 1}));
+            } else {
+            this.handleModeChange('longBreak');
+            this.setState(prevState =>
+              ({numShortBreaks: 0}));
+            }
+      } else {
+        // change from break to pomo
+        this.handleModeChange('pomodoro');
+      }
     }
     this.setState((prevState) => ({
       counter: prevState.counter - 1
