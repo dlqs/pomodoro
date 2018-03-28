@@ -13,27 +13,18 @@ durations.set('shortBreak', 5);
 const shortToLongRatio = 4;
 
 class ModeSelector extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  getColor(durationName) {
-    if (this.props.durationName === durationName) {
-      return 'primary'
-    }
-    return 'secondary'
-  }
   render() {
     return (
       <div>
-        <Button color={this.getColor('pomodoro')}
+        <Button color={this.props.durationName === 'pomodoro' ? 'primary' : 'secondary'}
                 onClick={(e) => this.props.onDurationChange('pomodoro')}>
           Pomodoro
         </Button> {' '}
-        <Button color={this.getColor('shortBreak')}
+        <Button color={this.props.durationName === 'shortBreak' ? 'primary' : 'secondary'}
                 onClick={(e) => this.props.onDurationChange('shortBreak')}>
           Short Break
         </Button> {' '}
-        <Button color={this.getColor('longBreak')}
+        <Button color={this.props.durationName === 'longBreak' ? 'primary' : 'secondary'}
                 onClick={(e) => this.props.onDurationChange('longBreak')}>
           Long Break
         </Button>
@@ -57,6 +48,23 @@ class Timer extends React.Component {
   }
 }
 
+class TimerController extends React.Component {
+  render() {
+    return (
+      <div>
+        <Button color={this.props.isTiming ? 'info' : 'success'}
+                onClick={(e) => this.props.onClick()}>
+          {this.props.isTiming ? "Pause" : "Start"}
+        </Button> {' '}
+        <Button color='warning'
+                onClick={(e) => this.props.onReset()}>
+          Reset
+        </Button>
+      </div>
+    )
+  }
+}
+
 class TimerContainer extends React.Component {
   constructor(props) {
     super(props);
@@ -65,10 +73,7 @@ class TimerContainer extends React.Component {
       counter: durations.get('pomodoro'),
       numShortBreaks: 0,
       isTiming: false,
-      buttonText: "Pause"
     };
-    //this.pauseTimer = this.pauseTimer.bind(this);
-    //this.startTimer = this.startTimer.bind(this);
     this.resetTimer = this.resetTimer.bind(this);
     this.toggleStart = this.toggleStart.bind(this);
     this.handleModeChange = this.handleModeChange.bind(this);
@@ -133,9 +138,11 @@ class TimerContainer extends React.Component {
           onDurationChange={this.handleModeChange}
         />
         <Timer counter={this.state.counter} />
-        <Button onClick={this.toggleStart}> { this.state.buttonText } </Button>
-        {' '}
-        <Button onClick={this.resetTimer}> Reset </Button>
+        <TimerController
+          onReset={this.resetTimer}
+          onClick={this.toggleStart}
+          isTiming={this.state.isTiming}
+        />
       </div>
     );
   }
