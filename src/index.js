@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import 'bootstrap/dist/css/bootstrap.css';
 import './index.css';
+import { Button } from 'reactstrap';
 
 // lengths of pomodoro, long break, short break respectively
 const durations = new Map();
@@ -31,15 +33,15 @@ class ModeSelector extends React.Component {
   render() {
     return (
       <div>
-        <button type='button' onClick={this.changeToPomodoro}>
+        <Button color="primary" onClick={this.changeToPomodoro}>
           Pomodoro
-        </button>
-        <button type='button' onClick={this.changeToShortBreak}>
+        </Button> {' '}
+        <Button color="primary" onClick={this.changeToShortBreak}>
           Short
-        </button>
-        <button type='button' onClick={this.changeToLongBreak}>
+        </Button> {' '}
+        <Button color="primary" onClick={this.changeToLongBreak}>
           Long
-        </button>
+        </Button>
       </div>
     )
   }
@@ -66,15 +68,18 @@ class TimerContainer extends React.Component {
     this.state = {
       durationName : 'pomodoro',
       counter: durations.get('pomodoro'),
-      numShortBreaks: 0
+      numShortBreaks: 0,
+      isTiming: false,
+      buttonText: "Pause"
     };
-    this.pauseTimer = this.pauseTimer.bind(this);
-    this.startTimer = this.startTimer.bind(this);
+    //this.pauseTimer = this.pauseTimer.bind(this);
+    //this.startTimer = this.startTimer.bind(this);
     this.resetTimer = this.resetTimer.bind(this);
+    this.toggleStart = this.toggleStart.bind(this);
     this.handleModeChange = this.handleModeChange.bind(this);
   }
   componentDidMount() {
-    this.startTimer();
+    this.toggleStart();
   }
   handleModeChange(name) {
     this.setState(prevState => ({
@@ -82,11 +87,22 @@ class TimerContainer extends React.Component {
       counter: durations.get(name)
     }))
   }
-  startTimer() {
-    this.timer = setInterval(() => this.tick(), 1000)
-  }
-  pauseTimer() {
-    clearInterval(this.timer);
+  toggleStart() {
+    if (this.state.isTiming === false) {
+      // starts the timer
+      this.timer = setInterval(() => this.tick(), 1000)
+      this.setState(prevState => ({
+        isTiming: !prevState.isTiming,
+        buttonText: "Pause"
+      }))
+    } else {
+      // pauses the timer
+      clearInterval(this.timer);
+      this.setState(prevState => ({
+        isTiming: !prevState.isTiming,
+        buttonText: "Start"
+      }))
+    }
   }
   resetTimer() {
     this.setState(prevState => ({
@@ -119,9 +135,9 @@ class TimerContainer extends React.Component {
       <div>
         <ModeSelector onDurationChange={this.handleModeChange}/>
         <Timer counter={this.state.counter} />
-        <button onClick={this.startTimer}> Start </button>
-        <button onClick={this.pauseTimer}> Pause </button>
-        <button onClick={this.resetTimer}> Reset </button>
+        <Button onClick={this.toggleStart}> { this.state.buttonText } </Button>
+        {' '}
+        <Button onClick={this.resetTimer}> Reset </Button>
       </div>
     );
   }
