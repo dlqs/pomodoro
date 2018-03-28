@@ -13,16 +13,28 @@ durations.set('shortBreak', 5);
 const shortToLongRatio = 4;
 
 class ModeSelector extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  getColor(durationName) {
+    if (this.props.durationName === durationName) {
+      return 'primary'
+    }
+    return 'secondary'
+  }
   render() {
     return (
       <div>
-        <Button color="primary" onClick={(e) => this.props.onDurationChange('pomodoro')}>
+        <Button color={this.getColor('pomodoro')}
+                onClick={(e) => this.props.onDurationChange('pomodoro')}>
           Pomodoro
         </Button> {' '}
-        <Button color="primary" onClick={(e) => this.props.onDurationChange('shortBreak')}>
+        <Button color={this.getColor('shortBreak')}
+                onClick={(e) => this.props.onDurationChange('shortBreak')}>
           Short Break
         </Button> {' '}
-        <Button color="primary" onClick={(e) => this.props.onDurationChange('longBreak')}>
+        <Button color={this.getColor('longBreak')}
+                onClick={(e) => this.props.onDurationChange('longBreak')}>
           Long Break
         </Button>
       </div>
@@ -116,7 +128,10 @@ class TimerContainer extends React.Component {
   render()   {
     return (
       <div>
-        <ModeSelector onDurationChange={this.handleModeChange}/>
+        <ModeSelector
+          durationName={this.state.durationName}
+          onDurationChange={this.handleModeChange}
+        />
         <Timer counter={this.state.counter} />
         <Button onClick={this.toggleStart}> { this.state.buttonText } </Button>
         {' '}
