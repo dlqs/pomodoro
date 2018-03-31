@@ -1,20 +1,21 @@
-#container {
-  position: fixed;
-  top: 40%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-#container h1 {
-  padding-left: 15%
-}
-#container h2 {
-  padding-left: 35%
-}
-#timerController {
-  padding-left: 50%
-}
 body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+}
+#container {
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  height: 650px;
+}
+#timer-container {
+  max-width: 50%;
+}
+h1, h2 {
+  text-align: center;
+}
+.button-row {
+  justify-content: center;
+  text-align: center;
 }

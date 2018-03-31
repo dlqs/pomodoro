@@ -6,16 +6,16 @@ import { Button } from 'reactstrap';
 
 // lengths of pomodoro, long break, short break respectively
 const durations = new Map();
-durations.set('pomodoro', 7);
-durations.set('longBreak', 6);
-durations.set('shortBreak', 5);
+durations.set('pomodoro', 1600);
+durations.set('longBreak', 600);
+durations.set('shortBreak', 300);
 // Ratio of short breaks to long breaks
 const shortToLongRatio = 4;
 
 class ModeSelector extends React.Component {
   render() {
     return (
-      <div>
+      <div class='button-row'>
         <Button color={this.props.durationName === 'pomodoro' ? 'primary' : 'secondary'}
                 onClick={(e) => this.props.onDurationChange('pomodoro')}>
           Pomodoro
@@ -51,7 +51,7 @@ class Timer extends React.Component {
 class TimerController extends React.Component {
   render() {
     return (
-      <div>
+      <div class='button-row'>
         <Button color={this.props.isTiming ? 'info' : 'success'}
                 onClick={(e) => this.props.onClick()}>
           {this.props.isTiming ? "Pause" : "Start"}
@@ -152,7 +152,7 @@ class PomodoroContainer extends React.Component {
     return (
       <div>
         <h1>Pomodoro!</h1>
-        <TimerContainer />
+        <TimerContainer id='timer-container'/>
       </div>
     );
   }
